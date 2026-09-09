@@ -1,0 +1,2500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  />
+  <meta name="theme-color" content="#ffffff" />
+  <title>Pepsi Nigeria — 100,000 Cash Prize</title>
+
+  <style>
+    :root {
+      --pepsi-blue: #004b93;
+      --pepsi-blue-light: #006fe6;
+      --pepsi-blue-dark: #003c7a;
+      --pepsi-red: #e32934;
+      --blue-soft: #dbeafe;
+      --blue-pale: #eff6ff;
+      --navy: #0f172a;
+      --muted: #475569;
+      --border: rgba(0, 75, 147, 0.28);
+      --shadow: rgba(0, 75, 147, 0.15);
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+      overflow-x: hidden;
+      background: #ffffff;
+      color: var(--navy);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
+    }
+
+    /* ==========================================
+       FULL-SCREEN BACKGROUND IMAGE - SINGLE IMAGE
+    ========================================== */
+
+    .background-image {
+      position: fixed;
+      z-index: -2;
+      inset: 0;
+      overflow: hidden;
+      background: #ffffff;
+      background-image: url("https://i.ibb.co/DPT7HDGz/IMG-6525.jpg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .background-image::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.16);
+      pointer-events: none;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 520px;
+      margin: auto;
+      position: relative;
+      z-index: 5;
+    }
+
+    /* ==========================================
+       PEPSI LOGO COMPONENT
+    ========================================== */
+
+    .pepsi-logo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .pepsi-logo-wrap {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    /* ==========================================
+       PEPSI LOGOS OUTSIDE THE WHITE CARD
+    ========================================== */
+
+    .pepsi-decor {
+      position: fixed;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+      user-select: none;
+      opacity: 1;
+    }
+
+    .pepsi-decor-logo {
+      width: 74px;
+      height: 74px;
+      flex: 0 0 74px;
+      padding: 2px;
+      border: 2px solid #ffffff;
+      box-shadow:
+        0 9px 22px rgba(0, 75, 147, 0.26),
+        0 0 0 1px rgba(0, 75, 147, 0.18);
+    }
+
+    .pepsi-decor-label {
+      color: var(--pepsi-blue);
+      font-size: 15px;
+      font-weight: 950;
+      letter-spacing: 1.7px;
+      text-shadow:
+        0 2px 9px rgba(255, 255, 255, 0.9),
+        0 2px 9px rgba(0, 75, 147, 0.18);
+      white-space: nowrap;
+    }
+
+    .pepsi-top-left {
+      top: 26px;
+      left: 26px;
+      transform: rotate(-9deg);
+    }
+
+    .pepsi-top-right {
+      top: 32px;
+      right: 26px;
+      transform: rotate(9deg);
+    }
+
+    .pepsi-bottom-left {
+      bottom: 30px;
+      left: 30px;
+      transform: rotate(7deg);
+    }
+
+    .pepsi-bottom-right {
+      right: 28px;
+      bottom: 32px;
+      transform: rotate(-7deg);
+    }
+
+    /* ==========================================
+       COMPACT WHITE GIVEAWAY CARD
+    ========================================== */
+
+    .giveaway-card {
+      width: 100%;
+      height: 490px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.84);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 10px 40px rgba(0, 75, 147, 0.18),
+        0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+    }
+
+    .card-viewport {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /*
+      Now 9 internal screens:
+      0 = Landing
+      1 = Preparing/loading
+      2 = Survey Question 1
+      3 = Survey Question 2
+      4 = Survey Question 3
+      5 = Survey Question 4
+      6 = Processing/Saving
+      7 = Entry steps
+      8 = Success
+    */
+    .card-track {
+      width: 900%;
+      height: 100%;
+      display: flex;
+      transform: translateX(0%);
+      transition: transform 560ms cubic-bezier(0.22, 0.8, 0.25, 1);
+      will-change: transform;
+    }
+
+    .panel {
+      width: 11.111%;
+      height: 100%;
+      flex: 0 0 11.111%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 28px 22px;
+      text-align: center;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ==========================================
+       BUTTONS
+    ========================================== */
+
+    .blue-button {
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      border-radius: 12px;
+      background: linear-gradient(
+        135deg,
+        var(--pepsi-blue),
+        var(--pepsi-blue-light)
+      );
+      box-shadow: 0 6px 18px rgba(0, 75, 147, 0.3);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        transform 180ms ease,
+        box-shadow 180ms ease,
+        filter 180ms ease,
+        opacity 180ms ease;
+    }
+
+    .blue-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 75, 147, 0.42);
+      filter: brightness(1.05);
+    }
+
+    .blue-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .blue-button:disabled {
+      opacity: 0.44;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* Survey option buttons */
+    .survey-option {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid rgba(0, 75, 147, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 200ms ease;
+      text-align: center;
+    }
+
+    .survey-option:hover {
+      border-color: var(--pepsi-blue);
+      background: var(--blue-pale);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 75, 147, 0.15);
+    }
+
+    .survey-option:active {
+      transform: translateY(0);
+    }
+
+    .survey-option.selected {
+      border-color: var(--pepsi-blue);
+      background: var(--pepsi-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 75, 147, 0.3);
+    }
+
+    .back-button {
+      padding: 10px 14px;
+      border: 1px solid rgba(0, 75, 147, 0.34);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      color: var(--pepsi-blue);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background 180ms ease, transform 180ms ease;
+    }
+
+    .back-button:hover {
+      background: var(--blue-pale);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================
+       SURVEY SPECIFIC STYLES
+    ========================================== */
+
+    .survey-question-number {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .survey-question-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .survey-options {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .survey-progress {
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .survey-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(0, 75, 147, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .survey-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pepsi-blue), var(--pepsi-blue-light));
+      border-radius: 4px;
+      transition: width 400ms ease;
+      width: 0%;
+    }
+
+    /* ==========================================
+       PROCESSING / SAVING ANIMATION SCREEN
+    ========================================== */
+
+    .processing-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .processing-step {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      transition: all 400ms ease;
+      opacity: 0.4;
+    }
+
+    .processing-step.active {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 4px 16px rgba(0, 75, 147, 0.08);
+    }
+
+    .processing-step.completed {
+      opacity: 1;
+      background: rgba(0, 75, 147, 0.06);
+    }
+
+    .processing-step .step-indicator {
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--pepsi-blue-light);
+      transition: all 400ms ease;
+    }
+
+    .processing-step.completed .step-indicator {
+      background: var(--pepsi-blue);
+    }
+
+    .processing-step .step-indicator .check-icon {
+      display: none;
+    }
+
+    .processing-step.completed .step-indicator .step-number {
+      display: none;
+    }
+
+    .processing-step.completed .step-indicator .check-icon {
+      display: block;
+    }
+
+    .processing-step .step-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+      flex: 1;
+      text-align: left;
+    }
+
+    .processing-step .step-loader {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      border: 3px solid var(--blue-soft);
+      border-top-color: var(--pepsi-blue);
+      border-radius: 50%;
+      animation: spin 700ms linear infinite;
+      opacity: 0;
+      transition: opacity 400ms ease;
+    }
+
+    .processing-step.active .step-loader {
+      opacity: 1;
+    }
+
+    .processing-step.completed .step-loader {
+      opacity: 0;
+    }
+
+    /* Progress bar for processing */
+    .processing-progress {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .processing-progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(0, 75, 147, 0.12);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .processing-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--pepsi-blue), var(--pepsi-blue-light));
+      border-radius: 4px;
+      transition: width 600ms ease;
+      width: 0%;
+    }
+
+    /* ==========================================
+       LANDING / HERO SCREEN
+    ========================================== */
+
+    .hero-logo-wrap {
+      width: 88px;
+      height: 88px;
+      padding: 3px;
+      border: 2px solid rgba(0, 75, 147, 0.18);
+      box-shadow: 0 10px 24px rgba(0, 75, 147, 0.18);
+      animation: logoFloat 2.6s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-7px);
+      }
+    }
+
+    .pepsi-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(0, 75, 147, 0.24);
+      border-radius: 999px;
+      background: rgba(239, 246, 255, 0.92);
+      color: var(--pepsi-blue);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.3px;
+    }
+
+    .pepsi-hero-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pepsi-red);
+      box-shadow: 0 0 0 4px rgba(227, 41, 52, 0.1);
+    }
+
+    .gift-emoji {
+      width: 66px;
+      height: 66px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      line-height: 1;
+      user-select: none;
+      filter: drop-shadow(0 8px 11px rgba(0, 75, 147, 0.18));
+      animation: giftBounce 2.2s ease-in-out infinite;
+    }
+
+    @keyframes giftBounce {
+      0%,
+      100% {
+        transform: translateY(0) scale(1);
+      }
+
+      50% {
+        transform: translateY(-7px) scale(1.04);
+      }
+    }
+
+    .landing-title {
+      color: var(--navy);
+      font-size: 26px;
+      line-height: 1.15;
+      font-weight: 850;
+      letter-spacing: 0.1px;
+    }
+
+    .landing-copy {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .ios-notification {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid rgba(0, 75, 147, 0.28);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 8px 24px rgba(0, 75, 147, 0.12);
+      text-align: left;
+      animation: notificationEnter 700ms ease both;
+    }
+
+    @keyframes notificationEnter {
+      from {
+        opacity: 0;
+        transform: translateY(-14px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .notification-logo-wrap {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      padding: 2px;
+      border: 1px solid rgba(0, 75, 147, 0.18);
+      box-shadow: 0 5px 13px rgba(0, 75, 147, 0.18);
+    }
+
+    .notification-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .notification-title {
+      margin-bottom: 3px;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .notification-copy {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .notification-claim {
+      flex: 0 0 auto;
+      padding: 8px 14px;
+      white-space: nowrap;
+    }
+
+    .main-claim {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      padding: 16px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 850;
+    }
+
+    .main-claim::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.28),
+        transparent
+      );
+      transform: translateX(-100%);
+      animation: buttonShimmer 2.2s infinite;
+    }
+
+    @keyframes buttonShimmer {
+      to {
+        transform: translateX(100%);
+      }
+    }
+
+    /* ==========================================
+       LOADING SCREEN
+    ========================================== */
+
+    .loading-logo-wrap {
+      width: 74px;
+      height: 74px;
+      padding: 3px;
+      border: 2px solid rgba(0, 75, 147, 0.16);
+      box-shadow: 0 10px 22px rgba(0, 75, 147, 0.15);
+      animation: loadingPulse 1.3s ease-in-out infinite;
+    }
+
+    @keyframes loadingPulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.06);
+      }
+    }
+
+    .loader-ring {
+      width: 46px;
+      height: 46px;
+      border: 5px solid var(--blue-soft);
+      border-top-color: var(--pepsi-blue);
+      border-radius: 50%;
+      animation: spin 800ms linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .panel-title {
+      color: var(--navy);
+      font-size: 24px;
+      font-weight: 850;
+    }
+
+    .panel-copy {
+      max-width: 320px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.42;
+    }
+
+    /* ==========================================
+       ENTRY PAGE
+    ========================================== */
+
+    .tasks-panel {
+      display: block;
+      padding: 0;
+      text-align: left;
+    }
+
+    .tasks-scroll-area {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px 22px 22px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 75, 147, 0.45) transparent;
+    }
+
+    .tasks-scroll-area::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .tasks-scroll-area::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .tasks-scroll-area::-webkit-scrollbar-thumb {
+      border-radius: 20px;
+      background: rgba(0, 75, 147, 0.38);
+    }
+
+    .entry-logo-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      margin-bottom: 4px;
+    }
+
+    .entry-logo-wrap {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      padding: 1px;
+      border: 1px solid rgba(0, 75, 147, 0.2);
+    }
+
+    .tasks-heading {
+      color: var(--navy);
+      text-align: center;
+      font-size: 22px;
+      font-weight: 850;
+    }
+
+    .tasks-subheading {
+      margin: 5px 0 14px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .step-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 11px;
+      border: 1px solid rgba(0, 75, 147, 0.24);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 6px 16px rgba(0, 75, 147, 0.06);
+      transition:
+        opacity 220ms ease,
+        transform 220ms ease,
+        border-color 220ms ease;
+    }
+
+    .step-card.is-locked {
+      opacity: 0.45;
+    }
+
+    .step-card.is-unlocked {
+      opacity: 1;
+      border-color: rgba(0, 75, 147, 0.38);
+      animation: unlockStep 450ms ease both;
+    }
+
+    @keyframes unlockStep {
+      from {
+        transform: translateY(5px);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .step-logo-wrap {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+      padding: 1px;
+      border: 1px solid rgba(0, 75, 147, 0.18);
+    }
+
+    .step-number {
+      width: 23px;
+      height: 23px;
+      flex: 0 0 23px;
+      display: grid;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--pepsi-blue);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .step-content {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .step-title {
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .step-status {
+      display: none;
+      margin-top: 3px;
+      color: var(--pepsi-blue);
+      font-size: 10px;
+      font-weight: 750;
+    }
+
+    .step-status.is-visible {
+      display: block;
+    }
+
+    .step-button {
+      flex: 0 0 auto;
+      padding: 8px 9px;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .checkmark {
+      width: 25px;
+      height: 25px;
+      flex: 0 0 25px;
+      display: none;
+    }
+
+    .checkmark.is-visible {
+      display: block;
+      animation: checkPop 420ms ease both;
+    }
+
+    @keyframes checkPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.45);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .checkmark svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .checkmark-circle {
+      fill: var(--pepsi-blue);
+    }
+
+    .checkmark-tick {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 26;
+      stroke-dashoffset: 26;
+      animation: tickDraw 450ms ease 180ms forwards;
+    }
+
+    @keyframes tickDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* ==========================================
+       SHARE PROGRESS
+    ========================================== */
+
+    .progress-box {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(0, 75, 147, 0.24);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 6px 16px rgba(0, 75, 147, 0.06);
+    }
+
+    .progress-box[hidden] {
+      display: none;
+    }
+
+    .progress-title {
+      margin-bottom: 8px;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 75, 147, 0.18);
+      border-radius: 10px;
+      background: rgba(0, 75, 147, 0.11);
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(
+        90deg,
+        var(--pepsi-blue),
+        var(--pepsi-blue-light)
+      );
+      transition: width 340ms ease;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 7px;
+    }
+
+    .progress-message {
+      flex: 1;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+
+    .progress-message.error {
+      color: var(--pepsi-blue-dark);
+      animation: messageShake 360ms ease;
+    }
+
+    .progress-message.success {
+      color: var(--pepsi-blue);
+    }
+
+    .progress-label {
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    @keyframes messageShake {
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-4px);
+      }
+
+      75% {
+        transform: translateX(4px);
+      }
+    }
+
+    /* ==========================================
+       SHARE INSTRUCTION BOX
+    ========================================== */
+
+    .share-instruction {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(0, 75, 147, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 12px rgba(0, 75, 147, 0.06);
+      text-align: center;
+      font-size: 12px;
+      color: var(--navy);
+      line-height: 1.4;
+      display: none;
+    }
+
+    .share-instruction.is-visible {
+      display: block;
+      animation: unlockStep 450ms ease both;
+    }
+
+    .share-instruction strong {
+      color: var(--pepsi-blue);
+    }
+
+    .share-instruction .emoji {
+      font-size: 14px;
+    }
+
+    /* ==========================================
+       ACCOUNT DETAILS FORM
+    ========================================== */
+
+    .account-step-card {
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .account-step-card .step-content {
+      padding-top: 4px;
+    }
+
+    .account-form {
+      width: 100%;
+      display: none;
+      padding-left: 62px;
+    }
+
+    .account-form.is-visible {
+      display: block;
+      animation: unlockStep 450ms ease both;
+    }
+
+    .account-form-row {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .account-form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .account-form-row label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .account-input {
+      width: 100%;
+      height: 37px;
+      padding: 0 10px;
+      border: 1px solid rgba(0, 75, 147, 0.3);
+      border-radius: 11px;
+      outline: none;
+      background: rgba(255, 255, 255, 0.96);
+      color: var(--navy);
+      font-size: 12px;
+      font-weight: 600;
+      transition:
+        border-color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .account-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .account-input:focus {
+      border-color: var(--pepsi-blue);
+      box-shadow: 0 0 0 3px rgba(0, 75, 147, 0.12);
+    }
+
+    .account-input:disabled {
+      background: rgba(0, 75, 147, 0.05);
+      opacity: 0.7;
+    }
+
+    .account-submit-row {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .account-submit-button {
+      min-width: 80px;
+      padding: 8px 16px;
+      font-size: 12px;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .account-error {
+      display: none;
+      margin-top: 6px;
+      color: var(--pepsi-blue-dark);
+      font-size: 10px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+
+    .account-error.is-visible {
+      display: block;
+      animation: messageShake 360ms ease;
+    }
+
+    /* ==========================================
+       SUCCESS SCREEN
+    ========================================== */
+
+    .success-logo-wrap {
+      width: 90px;
+      height: 90px;
+      padding: 3px;
+      border: 2px solid rgba(0, 75, 147, 0.2);
+      box-shadow: 0 10px 22px rgba(0, 75, 147, 0.18);
+      animation: successPop 520ms ease both;
+    }
+
+    @keyframes successPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      70% {
+        transform: scale(1.08);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .success-check {
+      width: 36px;
+      height: 36px;
+      margin-top: -30px;
+      display: grid;
+      place-items: center;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      background: var(--pepsi-blue);
+      box-shadow: 0 6px 15px rgba(0, 75, 147, 0.25);
+      color: #ffffff;
+    }
+
+    .success-check svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .timer {
+      padding: 12px 16px;
+      border: 1px solid rgba(0, 75, 147, 0.25);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 6px 18px rgba(0, 75, 147, 0.1);
+      color: var(--pepsi-blue-dark);
+      font-size: 20px;
+      font-weight: 850;
+      letter-spacing: 1px;
+    }
+
+    /* ==========================================
+       RESPONSIVE
+    ========================================== */
+
+    @media (max-width: 850px) {
+      .pepsi-decor {
+        opacity: 0.65;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .pepsi-decor {
+        opacity: 0.45;
+      }
+
+      .pepsi-decor-logo {
+        width: 52px;
+        height: 52px;
+        flex-basis: 52px;
+      }
+
+      .pepsi-decor-label {
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .pepsi-top-left {
+        top: 10px;
+        left: 10px;
+      }
+
+      .pepsi-top-right {
+        top: 12px;
+        right: 10px;
+      }
+
+      .pepsi-bottom-left,
+      .pepsi-bottom-right {
+        display: none;
+      }
+    }
+
+    @media (max-width: 420px) {
+      body {
+        padding: 18px 14px;
+      }
+
+      .tasks-scroll-area {
+        padding: 16px;
+      }
+
+      .hero-logo-wrap {
+        width: 76px;
+        height: 76px;
+      }
+
+      .gift-emoji {
+        width: 58px;
+        height: 58px;
+        font-size: 50px;
+      }
+
+      .ios-notification {
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .notification-logo-wrap {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+      }
+
+      .notification-copy {
+        font-size: 12px;
+      }
+
+      .notification-claim {
+        padding: 8px 11px;
+      }
+
+      .step-card {
+        gap: 7px;
+        padding: 10px;
+      }
+
+      .step-logo-wrap {
+        width: 27px;
+        height: 27px;
+        flex-basis: 27px;
+      }
+
+      .step-number {
+        width: 21px;
+        height: 21px;
+        flex-basis: 21px;
+      }
+
+      .step-title {
+        font-size: 12px;
+      }
+
+      .step-button {
+        padding: 8px;
+        font-size: 10px;
+      }
+
+      .account-form {
+        padding-left: 0;
+      }
+
+      .account-input {
+        font-size: 11px;
+        height: 34px;
+      }
+
+      .account-submit-button {
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+
+      .survey-question-text {
+        font-size: 16px;
+      }
+
+      .survey-option {
+        font-size: 13px;
+        padding: 10px 14px;
+      }
+
+      .processing-step .step-text {
+        font-size: 12px;
+      }
+
+      .processing-step {
+        padding: 8px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- BACKGROUND IMAGE - SINGLE IMAGE -->
+  <div class="background-image" aria-hidden="true"></div>
+
+  <!-- PEPSI LOGOS OUTSIDE WHITE CARD -->
+  <div class="pepsi-decor pepsi-top-left" aria-hidden="true">
+    <div class="pepsi-logo-wrap pepsi-decor-logo">
+      <img
+        class="pepsi-logo"
+        src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+        alt=""
+      />
+    </div>
+    <span class="pepsi-decor-label">PEPSI NIGERIA</span>
+  </div>
+
+  <div class="pepsi-decor pepsi-top-right" aria-hidden="true">
+    <div class="pepsi-logo-wrap pepsi-decor-logo">
+      <img
+        class="pepsi-logo"
+        src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+        alt=""
+      />
+    </div>
+    <span class="pepsi-decor-label">PEPSI NIGERIA</span>
+  </div>
+
+  <div class="pepsi-decor pepsi-bottom-left" aria-hidden="true">
+    <div class="pepsi-logo-wrap pepsi-decor-logo">
+      <img
+        class="pepsi-logo"
+        src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+        alt=""
+      />
+    </div>
+    <span class="pepsi-decor-label">PEPSI NIGERIA</span>
+  </div>
+
+  <div class="pepsi-decor pepsi-bottom-right" aria-hidden="true">
+    <div class="pepsi-logo-wrap pepsi-decor-logo">
+      <img
+        class="pepsi-logo"
+        src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+        alt=""
+      />
+    </div>
+    <span class="pepsi-decor-label">PEPSI NIGERIA</span>
+  </div>
+
+  <!-- MAIN WHITE CARD -->
+  <div class="page">
+    <main class="giveaway-card">
+      <div class="card-viewport">
+        <div class="card-track" id="cardTrack">
+
+          <!-- PAGE 0: LANDING -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap hero-logo-wrap">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi Nigeria"
+              />
+            </div>
+
+            <div class="pepsi-hero-badge">
+              <span class="pepsi-hero-badge-dot"></span>
+              PEPSI NIGERIA · Since 1898
+            </div>
+
+            <div class="gift-emoji" aria-hidden="true">🎁</div>
+
+            <h1 class="landing-title">Win #100,000 Cash Prize</h1>
+
+            <p class="landing-copy">
+              Complete the entry steps to activate your Cash giveaway entry.
+            </p>
+
+            <div class="ios-notification">
+              <div class="pepsi-logo-wrap notification-logo-wrap">
+                <img
+                  class="pepsi-logo"
+                  src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                  alt=""
+                />
+              </div>
+
+              <div class="notification-content">
+                <div class="notification-title">Pepsi Nigeria Giveaway</div>
+
+                <div class="notification-copy">
+                  You've been selected to win 100k. Tap "Claim" to verify and
+                  continue.
+                </div>
+              </div>
+
+              <button
+                type="button"
+                class="blue-button notification-claim claim-trigger"
+              >
+                Claim
+              </button>
+            </div>
+
+            <button
+              type="button"
+              class="blue-button main-claim claim-trigger"
+            >
+              Claim Your prize Now
+            </button>
+          </section>
+
+          <!-- PAGE 1: LOADING -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap loading-logo-wrap">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi Nigeria"
+              />
+            </div>
+
+            <div class="loader-ring" aria-hidden="true"></div>
+
+            <h2 class="panel-title">Preparing your claim</h2>
+
+            <p class="panel-copy">
+              Please wait while we prepare your entry steps.
+            </p>
+          </section>
+
+          <!-- PAGE 2: SURVEY QUESTION 1 -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap" style="width:50px;height:50px;padding:2px;border:2px solid rgba(0,75,147,0.16);">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi"
+              />
+            </div>
+
+            <div class="survey-question-number">Question 1 of 4</div>
+
+            <div class="survey-question-text">How often do you drink Pepsi?</div>
+
+            <div class="survey-options">
+              <button class="survey-option" data-survey="1" data-value="Daily">Daily</button>
+              <button class="survey-option" data-survey="1" data-value="A few times a week">A few times a week</button>
+              <button class="survey-option" data-survey="1" data-value="Occasionally">Occasionally</button>
+            </div>
+
+            <div class="survey-progress">
+              <div class="survey-progress-track">
+                <div class="survey-progress-fill" style="width:25%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 3: SURVEY QUESTION 2 -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap" style="width:50px;height:50px;padding:2px;border:2px solid rgba(0,75,147,0.16);">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi"
+              />
+            </div>
+
+            <div class="survey-question-number">Question 2 of 4</div>
+
+            <div class="survey-question-text">Where do you usually buy Pepsi?</div>
+
+            <div class="survey-options">
+              <button class="survey-option" data-survey="2" data-value="Supermarket">Supermarket</button>
+              <button class="survey-option" data-survey="2" data-value="Local store">Local store</button>
+              <button class="survey-option" data-survey="2" data-value="Restaurant/Fast food">Restaurant/Fast food</button>
+            </div>
+
+            <div class="survey-progress">
+              <div class="survey-progress-track">
+                <div class="survey-progress-fill" style="width:50%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 4: SURVEY QUESTION 3 -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap" style="width:50px;height:50px;padding:2px;border:2px solid rgba(0,75,147,0.16);">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi"
+              />
+            </div>
+
+            <div class="survey-question-number">Question 3 of 4</div>
+
+            <div class="survey-question-text">How would you rate your overall Pepsi experience?</div>
+
+            <div class="survey-options">
+              <button class="survey-option" data-survey="3" data-value="Excellent">Excellent</button>
+              <button class="survey-option" data-survey="3" data-value="Good">Good</button>
+              <button class="survey-option" data-survey="3" data-value="Average">Average</button>
+            </div>
+
+            <div class="survey-progress">
+              <div class="survey-progress-track">
+                <div class="survey-progress-fill" style="width:75%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 5: SURVEY QUESTION 4 -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap" style="width:50px;height:50px;padding:2px;border:2px solid rgba(0,75,147,0.16);">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi"
+              />
+            </div>
+
+            <div class="survey-question-number">Question 4 of 4</div>
+
+            <div class="survey-question-text">What do you like most about Pepsi?</div>
+
+            <div class="survey-options">
+              <button class="survey-option" data-survey="4" data-value="Taste">Taste</button>
+              <button class="survey-option" data-survey="4" data-value="Price">Price</button>
+              <button class="survey-option" data-survey="4" data-value="Packaging">Packaging</button>
+            </div>
+
+            <div class="survey-progress">
+              <div class="survey-progress-track">
+                <div class="survey-progress-fill" style="width:100%"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 6: PROCESSING / SAVING ANIMATION -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap" style="width:60px;height:60px;padding:2px;border:2px solid rgba(0,75,147,0.16);">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi"
+              />
+            </div>
+
+            <h2 class="panel-title" style="font-size:20px;">Processing Your Entry</h2>
+
+            <div class="processing-container">
+              <!-- Step 1: Saving Answers -->
+              <div class="processing-step" id="processingStep1">
+                <div class="step-indicator">
+                  <span class="step-number">1</span>
+                  <svg class="check-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                  </svg>
+                </div>
+                <span class="step-text">Saving Answers</span>
+                <div class="step-loader"></div>
+              </div>
+
+              <!-- Step 2: Saving Progress -->
+              <div class="processing-step" id="processingStep2">
+                <div class="step-indicator">
+                  <span class="step-number">2</span>
+                  <svg class="check-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                  </svg>
+                </div>
+                <span class="step-text">Saving Progress</span>
+                <div class="step-loader"></div>
+              </div>
+
+              <!-- Step 3: Redirecting -->
+              <div class="processing-step" id="processingStep3">
+                <div class="step-indicator">
+                  <span class="step-number">3</span>
+                  <svg class="check-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L9 17l-5-5"/>
+                  </svg>
+                </div>
+                <span class="step-text">Redirecting to final steps</span>
+                <div class="step-loader"></div>
+              </div>
+            </div>
+
+            <div class="processing-progress">
+              <div class="processing-progress-track">
+                <div class="processing-progress-fill" id="processingProgressFill"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 7: ENTRY PAGE -->
+          <section class="panel tasks-panel">
+            <div class="tasks-scroll-area" id="tasksScrollArea">
+              <div class="entry-logo-line">
+                <div class="pepsi-logo-wrap entry-logo-wrap">
+                  <img
+                    class="pepsi-logo"
+                    src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                    alt=""
+                  />
+                </div>
+
+                <h2 class="tasks-heading">Complete Your Entry</h2>
+              </div>
+
+              <p class="tasks-subheading">
+                Complete each step in order to activate your entry.
+              </p>
+
+              <div class="steps-list">
+
+                <!-- STEP 1 -->
+                <div class="step-card" id="telegramStep">
+                  <div class="pepsi-logo-wrap step-logo-wrap">
+                    <img
+                      class="pepsi-logo"
+                      src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                      alt=""
+                    />
+                  </div>
+
+                  <div class="step-number">1</div>
+
+                  <div class="step-content">
+                    <div class="step-title">Follow our Telegram Channel</div>
+
+                    <div class="step-status" id="telegramStatus">
+                      Verification complete
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="blue-button step-button"
+                    id="telegramButton"
+                  >
+                    Join Telegram
+                  </button>
+
+                  <div class="checkmark" id="telegramCheck" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                      <circle
+                        class="checkmark-circle"
+                        cx="24"
+                        cy="24"
+                        r="20"
+                      ></circle>
+
+                      <path
+                        class="checkmark-tick"
+                        d="M14 25l7 7 14-15"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- STEP 2: LOCKED UNTIL STEP 1 COMPLETES -->
+                <div class="step-card is-locked" id="shareStep">
+                  <div class="pepsi-logo-wrap step-logo-wrap">
+                    <img
+                      class="pepsi-logo"
+                      src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                      alt=""
+                    />
+                  </div>
+
+                  <div class="step-number">2</div>
+
+                  <div class="step-content">
+                    <div class="step-title">Share Your Referral Link</div>
+
+                    <div class="step-status" id="shareStatus">
+                      Share target completed
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="blue-button step-button"
+                    id="shareButton"
+                    disabled
+                  >
+                    Share Now
+                  </button>
+                </div>
+
+                <!-- SHARE INSTRUCTION -->
+                <div class="share-instruction" id="shareInstruction">
+                  <span class="emoji">📤</span>
+                  <strong>Share to your 5 friends and groups on WhatsApp until the bar is full!</strong>
+                  <span class="emoji">📱</span>
+                </div>
+
+                <div class="progress-box" id="progressBox" hidden>
+                  <div class="progress-title">Share Progress</div>
+
+                  <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                  </div>
+
+                  <div class="progress-row">
+                    <div class="progress-message" id="progressMessage">
+                      Complete a share to earn 5% or 10%.
+                    </div>
+
+                    <div class="progress-label" id="progressLabel">0%</div>
+                  </div>
+                </div>
+
+                <!-- STEP 3: LOCKED UNTIL STEP 2 REACHES 100% -->
+                <div class="step-card is-locked" id="sponsorStep">
+                  <div class="pepsi-logo-wrap step-logo-wrap">
+                    <img
+                      class="pepsi-logo"
+                      src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                      alt=""
+                    />
+                  </div>
+
+                  <div class="step-number">3</div>
+
+                  <div class="step-content">
+                    <div class="step-title">Sign Up on Sponsor Site</div>
+
+                    <div class="step-status" id="sponsorStatus">
+                      Sponsor step completed
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="blue-button step-button"
+                    id="sponsorButton"
+                    disabled
+                  >
+                    Visit Sponsor
+                  </button>
+
+                  <div class="checkmark" id="sponsorCheck" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                      <circle
+                        class="checkmark-circle"
+                        cx="24"
+                        cy="24"
+                        r="20"
+                      ></circle>
+
+                      <path
+                        class="checkmark-tick"
+                        d="M14 25l7 7 14-15"
+                      ></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- STEP 4: LOCKED UNTIL STEP 3 COMPLETES -->
+                <div
+                  class="step-card account-step-card is-locked"
+                  id="accountStep"
+                >
+                  <div class="pepsi-logo-wrap step-logo-wrap">
+                    <img
+                      class="pepsi-logo"
+                      src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                      alt=""
+                    />
+                  </div>
+
+                  <div class="step-number">4</div>
+
+                  <div class="step-content">
+                    <div class="step-title">Enter Your Account Details</div>
+
+                    <div class="step-status" id="accountStatus">
+                      Account details submitted
+                    </div>
+                  </div>
+
+                  <div class="checkmark" id="accountCheck" aria-hidden="true">
+                    <svg viewBox="0 0 48 48">
+                      <circle
+                        class="checkmark-circle"
+                        cx="24"
+                        cy="24"
+                        r="20"
+                      ></circle>
+
+                      <path
+                        class="checkmark-tick"
+                        d="M14 25l7 7 14-15"
+                      ></path>
+                    </svg>
+                  </div>
+
+                  <div class="account-form" id="accountForm">
+                    <div class="account-form-row">
+                      <label for="accountName">Account Holder Name</label>
+                      <input
+                        type="text"
+                        id="accountName"
+                        class="account-input"
+                        name="accountName"
+                        autocomplete="name"
+                        placeholder="Enter full name"
+                        disabled
+                      />
+                    </div>
+
+                    <div class="account-form-row">
+                      <label for="bankName">Bank Name</label>
+                      <input
+                        type="text"
+                        id="bankName"
+                        class="account-input"
+                        name="bankName"
+                        autocomplete="organization"
+                        placeholder="Enter bank name"
+                        disabled
+                      />
+                    </div>
+
+                    <div class="account-form-row">
+                      <label for="accountNumber">Account Number</label>
+                      <input
+                        type="tel"
+                        id="accountNumber"
+                        class="account-input"
+                        name="accountNumber"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        placeholder="Enter account number"
+                        disabled
+                      />
+                    </div>
+
+                    <div class="account-submit-row">
+                      <button
+                        type="button"
+                        class="blue-button account-submit-button"
+                        id="accountSubmitButton"
+                        disabled
+                      >
+                        Submit
+                      </button>
+                    </div>
+
+                    <div
+                      class="account-error"
+                      id="accountError"
+                      aria-live="polite"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tasks-back-wrap">
+                <button type="button" class="back-button" id="backToLanding">
+                  Back
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- PAGE 8: SUCCESS -->
+          <section class="panel">
+            <div class="pepsi-logo-wrap success-logo-wrap">
+              <img
+                class="pepsi-logo"
+                src="https://i.ibb.co/S4PxcPn0/BC890-B88-FF1-F-453-C-820-A-4644-B5-B1-B926.png"
+                alt="Pepsi Nigeria"
+              />
+            </div>
+
+            <div class="success-check" aria-hidden="true">
+              <svg viewBox="0 0 48 48">
+                <path d="M14 25l7 7 14-15"></path>
+              </svg>
+            </div>
+
+            <h2 class="panel-title">Congratulations!</h2>
+
+            <p class="panel-copy">
+              You've completed all steps. Distribution of the Cash prize starts in:
+            </p>
+
+            <div class="timer" id="timer">06:00:00</div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /* ==========================================
+       GIVEAWAY FLOW
+    ========================================== */
+
+    const cardTrack = document.getElementById("cardTrack");
+    const claimTriggers = document.querySelectorAll(".claim-trigger");
+    const tasksScrollArea = document.getElementById("tasksScrollArea");
+
+    const telegramButton = document.getElementById("telegramButton");
+    const telegramStatus = document.getElementById("telegramStatus");
+    const telegramCheck = document.getElementById("telegramCheck");
+
+    const shareStep = document.getElementById("shareStep");
+    const shareButton = document.getElementById("shareButton");
+    const shareStatus = document.getElementById("shareStatus");
+    const shareInstruction = document.getElementById("shareInstruction");
+
+    const progressBox = document.getElementById("progressBox");
+    const progressFill = document.getElementById("progressFill");
+    const progressLabel = document.getElementById("progressLabel");
+    const progressMessage = document.getElementById("progressMessage");
+
+    const sponsorStep = document.getElementById("sponsorStep");
+    const sponsorButton = document.getElementById("sponsorButton");
+    const sponsorStatus = document.getElementById("sponsorStatus");
+    const sponsorCheck = document.getElementById("sponsorCheck");
+
+    const accountStep = document.getElementById("accountStep");
+    const accountForm = document.getElementById("accountForm");
+    const accountName = document.getElementById("accountName");
+    const bankName = document.getElementById("bankName");
+    const accountNumber = document.getElementById("accountNumber");
+    const accountSubmitButton = document.getElementById("accountSubmitButton");
+    const accountError = document.getElementById("accountError");
+    const accountStatus = document.getElementById("accountStatus");
+    const accountCheck = document.getElementById("accountCheck");
+
+    const backToLanding = document.getElementById("backToLanding");
+    const timer = document.getElementById("timer");
+
+    // Processing elements
+    const processingStep1 = document.getElementById("processingStep1");
+    const processingStep2 = document.getElementById("processingStep2");
+    const processingStep3 = document.getElementById("processingStep3");
+    const processingProgressFill = document.getElementById("processingProgressFill");
+
+    // Survey elements
+    const surveyOptions = document.querySelectorAll('.survey-option');
+
+    let currentScreen = 0;
+    let telegramCompleted = false;
+    let sharingActive = false;
+    let sharingCompleted = false;
+    let sponsorCompleted = false;
+    let accountCompleted = false;
+    let shareProgress = 0;
+    let countdownStarted = false;
+    let shareAttemptCount = 0;
+    let surveyCompleted = false;
+
+    /*
+      Replace these placeholder links before publishing.
+    */
+    const telegramGroupUrl = "https://t.me/your_telegram_group";
+    const sponsorSignupUrl = "https://example.com/sponsor-signup";
+
+    /*
+      Replace with your deployed giveaway/referral URL when available.
+    */
+    const referralLink = window.location.href;
+
+    /*
+      Now 9 internal white-card screens:
+      0 = Landing
+      1 = Loading
+      2 = Survey 1
+      3 = Survey 2
+      4 = Survey 3
+      5 = Survey 4
+      6 = Processing
+      7 = Entry
+      8 = Success
+    */
+    function showScreen(screenNumber) {
+      currentScreen = screenNumber;
+      cardTrack.style.transform = `translateX(-${screenNumber * 11.111}%)`;
+
+      if (screenNumber === 7) {
+        setTimeout(() => {
+          tasksScrollArea.scrollTop = 0;
+        }, 600);
+      }
+    }
+
+    function scrollTaskIntoView(element) {
+      setTimeout(() => {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "center"
+        });
+      }, 180);
+    }
+
+    function unlockStep(stepElement) {
+      stepElement.classList.remove("is-locked");
+      stepElement.classList.add("is-unlocked");
+    }
+
+    function startClaimFlow() {
+      if (currentScreen !== 0) return;
+
+      showScreen(1);
+
+      setTimeout(() => {
+        showScreen(2); // Go to Survey 1
+      }, 1400);
+    }
+
+    claimTriggers.forEach((button) => {
+      button.addEventListener("click", startClaimFlow);
+    });
+
+    backToLanding.addEventListener("click", () => {
+      if (!sharingActive && !accountCompleted) {
+        showScreen(0);
+      }
+    });
+
+    /* ==========================================
+       SURVEY HANDLING
+    ========================================== */
+
+    surveyOptions.forEach((option) => {
+      option.addEventListener('click', function() {
+        const surveyNumber = parseInt(this.dataset.survey);
+        
+        // Add selected class to this option
+        const parentOptions = this.parentElement.querySelectorAll('.survey-option');
+        parentOptions.forEach(opt => opt.classList.remove('selected'));
+        this.classList.add('selected');
+        
+        // Store the answer
+        const answer = this.dataset.value;
+        console.log(`Survey ${surveyNumber} answer: ${answer}`);
+        
+        // Move to next screen after a short delay
+        setTimeout(() => {
+          if (surveyNumber < 4) {
+            showScreen(surveyNumber + 2);
+          } else {
+            surveyCompleted = true;
+            showScreen(6);
+            startProcessingAnimation();
+          }
+        }, 400);
+      });
+    });
+
+    /* ==========================================
+       PROCESSING ANIMATION
+    ========================================== */
+
+    function startProcessingAnimation() {
+      const steps = [processingStep1, processingStep2, processingStep3];
+      let currentStep = 0;
+      let progress = 0;
+
+      steps.forEach(step => {
+        step.classList.remove('active', 'completed');
+      });
+
+      steps[0].classList.add('active');
+
+      function processStep() {
+        progress += 33.33;
+        processingProgressFill.style.width = Math.min(progress, 100) + '%';
+
+        steps[currentStep].classList.remove('active');
+        steps[currentStep].classList.add('completed');
+
+        currentStep++;
+
+        if (currentStep < steps.length) {
+          setTimeout(() => {
+            steps[currentStep].classList.add('active');
+            setTimeout(processStep, 1200);
+          }, 800);
+        } else {
+          setTimeout(() => {
+            processingProgressFill.style.width = '100%';
+            
+            setTimeout(() => {
+              showScreen(7);
+            }, 500);
+          }, 400);
+        }
+      }
+
+      setTimeout(processStep, 1000);
+    }
+
+    /* ==========================================
+       STEP 1: TELEGRAM
+    ========================================== */
+
+    telegramButton.addEventListener("click", () => {
+      if (telegramCompleted) return;
+
+      telegramButton.disabled = true;
+      telegramButton.textContent = "Verifying…";
+
+      window.open(telegramGroupUrl, "_blank", "noopener,noreferrer");
+
+      setTimeout(() => {
+        telegramCompleted = true;
+
+        telegramButton.textContent = "Completed";
+        telegramStatus.classList.add("is-visible");
+        telegramCheck.classList.add("is-visible");
+
+        unlockStep(shareStep);
+        shareInstruction.classList.add("is-visible");
+        
+        const currentShareBtn = document.getElementById('shareButton');
+        if (currentShareBtn) {
+          currentShareBtn.disabled = false;
+        }
+
+        scrollTaskIntoView(shareStep);
+      }, 10000);
+    });
+
+    function setProgressMessage(message, type = "") {
+      progressMessage.textContent = message;
+      progressMessage.classList.remove("error", "success");
+
+      if (type) {
+        progressMessage.classList.add(type);
+      }
+    }
+
+    /* ==========================================
+       STEP 2: SHARE BUTTON
+    ========================================== */
+
+    const WHATSAPP_SHARE_MESSAGE = 
+      "Pepsi N100,000 cash prize giveaway🎁🎉. Pepsi is celebrating its 120th Anniversary and is giving out N100,000 cash prize to customers. To claim yours, Enter your Account number below";
+
+    const ERROR_MESSAGES = [
+      "⚠️ Share not verified. Please share the referral link correctly.",
+      "⚠️ Invalid share detected. Please share to a real contact.",
+      "⚠️ Share not completed. Please try sharing again.",
+      "⚠️ We couldn't verify your share. Please share properly.",
+      "⚠️ Share attempt failed. Please share to a valid contact."
+    ];
+
+    function getRandomErrorMessage() {
+      return ERROR_MESSAGES[Math.floor(Math.random() * ERROR_MESSAGES.length)];
+    }
+
+    function showShareLoadingAnimation() {
+      return new Promise((resolve, reject) => {
+        progressFill.style.width = shareProgress + '%';
+        progressLabel.textContent = shareProgress + '%';
+        progressBox.hidden = false;
+        setProgressMessage("⏳ Please wait, verifying your share...", "success");
+
+        let progress = shareProgress;
+        
+        shareAttemptCount++;
+        console.log(`Share attempt #${shareAttemptCount}`);
+        
+        const shouldShowError = (shareAttemptCount === 2 || shareAttemptCount === 6 || shareAttemptCount === 9);
+        
+        setTimeout(() => {
+          
+          if (shouldShowError) {
+            const errorMsg = getRandomErrorMessage();
+            setProgressMessage(errorMsg, "error");
+            reject(new Error(errorMsg));
+            return;
+          }
+          
+          let targetProgress = Math.min(100, progress + (Math.random() < 0.5 ? 5 : 10));
+          setProgressMessage("✅ Share verified! Updating progress...", "success");
+          
+          const increment = () => {
+            progress = Math.min(progress + 1, targetProgress);
+            
+            progressFill.style.width = progress + '%';
+            progressLabel.textContent = progress + '%';
+
+            if (progress < targetProgress) {
+              setTimeout(increment, 50);
+            } else {
+              shareProgress = targetProgress;
+              setProgressMessage(
+                `🎉 Share recorded! You received ${targetProgress - (shareProgress - (targetProgress - (shareProgress || 0)))}% progress.`,
+                "success"
+              );
+              
+              setTimeout(() => {
+                resolve();
+              }, 300);
+            }
+          };
+
+          setTimeout(increment, 300);
+          
+        }, 5000);
+      });
+    }
+
+    function openWhatsApp() {
+      const encoded = encodeURIComponent(WHATSAPP_SHARE_MESSAGE);
+      const url = `https://wa.me/?text=${encoded}`;
+      window.open(url, '_blank');
+    }
+
+    async function handleShareClick(e) {
+      e.preventDefault();
+      
+      if (!telegramCompleted || sharingActive || sharingCompleted) return;
+
+      sharingActive = true;
+      const btn = document.getElementById('shareButton');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Verifying...";
+      }
+
+      try {
+        await showShareLoadingAnimation();
+        openWhatsApp();
+
+        if (shareProgress >= 100) {
+          sharingCompleted = true;
+          if (btn) {
+            btn.textContent = "Completed";
+          }
+          shareStatus.classList.add("is-visible");
+          shareInstruction.classList.remove("is-visible");
+
+          unlockStep(sponsorStep);
+          sponsorButton.disabled = false;
+
+          scrollTaskIntoView(sponsorStep);
+        } else {
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Share Again";
+          }
+        }
+
+      } catch (error) {
+        console.error('Share error:', error);
+        const btn = document.getElementById('shareButton');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = "Share Again";
+        }
+      } finally {
+        sharingActive = false;
+      }
+    }
+
+    const shareBtnElement = document.getElementById('shareButton');
+    shareBtnElement.removeAttribute('onclick');
+    shareBtnElement.addEventListener('click', handleShareClick);
+
+    /* ==========================================
+       STEP 3: SPONSOR
+    ========================================== */
+
+    sponsorButton.addEventListener("click", () => {
+      if (!sharingCompleted || sponsorCompleted) return;
+
+      sponsorButton.disabled = true;
+      sponsorButton.textContent = "Checking…";
+
+      window.open(sponsorSignupUrl, "_blank", "noopener,noreferrer");
+
+      setTimeout(() => {
+        sponsorCompleted = true;
+
+        sponsorButton.textContent = "Completed";
+        sponsorStatus.classList.add("is-visible");
+        sponsorCheck.classList.add("is-visible");
+
+        unlockStep(accountStep);
+        accountForm.classList.add("is-visible");
+
+        accountName.disabled = false;
+        bankName.disabled = false;
+        accountNumber.disabled = false;
+        accountSubmitButton.disabled = false;
+
+        scrollTaskIntoView(accountStep);
+
+        setTimeout(() => {
+          accountName.focus();
+        }, 450);
+      }, 10000);
+    });
+
+    /* ==========================================
+       STEP 4: ACCOUNT DETAILS
+    ========================================== */
+
+    function showAccountError(message) {
+      accountError.textContent = message;
+      accountError.classList.add("is-visible");
+    }
+
+    function clearAccountError() {
+      accountError.textContent = "";
+      accountError.classList.remove("is-visible");
+    }
+
+    function isValidAccountNumber(value) {
+      const digits = value.replace(/\D/g, "");
+      return digits.length >= 10 && digits.length <= 10;
+    }
+
+    function isValidAccountName(value) {
+      return value.trim().length >= 2;
+    }
+
+    function isValidBankName(value) {
+      return value.trim().length >= 2;
+    }
+
+    accountSubmitButton.addEventListener("click", () => {
+      if (!sponsorCompleted) {
+        showAccountError(
+          "Complete the sponsor signup step before submitting your account details."
+        );
+        return;
+      }
+
+      if (accountCompleted) return;
+
+      const name = accountName.value.trim();
+      const bank = bankName.value.trim();
+      const number = accountNumber.value.trim();
+
+      // Validate Account Name
+      if (!name) {
+        showAccountError("Please enter your account holder name.");
+        accountName.focus();
+        return;
+      }
+
+      if (!isValidAccountName(name)) {
+        showAccountError("Please enter a valid account holder name.");
+        accountName.focus();
+        return;
+      }
+
+      // Validate Bank Name
+      if (!bank) {
+        showAccountError("Please enter your bank name.");
+        bankName.focus();
+        return;
+      }
+
+      if (!isValidBankName(bank)) {
+        showAccountError("Please enter a valid bank name.");
+        bankName.focus();
+        return;
+      }
+
+      // Validate Account Number
+      if (!number) {
+        showAccountError("Please enter your account number.");
+        accountNumber.focus();
+        return;
+      }
+
+      if (!isValidAccountNumber(number)) {
+        showAccountError("Please enter a valid 10-digit account number.");
+        accountNumber.focus();
+        return;
+      }
+
+      clearAccountError();
+
+      accountCompleted = true;
+      accountName.disabled = true;
+      bankName.disabled = true;
+      accountNumber.disabled = true;
+      accountSubmitButton.disabled = true;
+      accountSubmitButton.textContent = "Submitted";
+
+      accountStatus.classList.add("is-visible");
+      accountCheck.classList.add("is-visible");
+
+      console.log(`Account Details - Name: ${name}, Bank: ${bank}, Number: ${number}`);
+
+      setTimeout(() => {
+        showScreen(8);
+        startCountdown();
+      }, 850);
+    });
+
+    // Allow Enter key to submit
+    [accountName, bankName, accountNumber].forEach((field) => {
+      field.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          accountSubmitButton.click();
+        }
+      });
+    });
+
+    // Clear errors on input
+    [accountName, bankName, accountNumber].forEach((field) => {
+      field.addEventListener("input", clearAccountError);
+    });
+
+    function startCountdown() {
+      if (countdownStarted) return;
+
+      countdownStarted = true;
+      let remainingSeconds = 6 * 60 * 60;
+
+      function updateCountdown() {
+        const hours = String(
+          Math.floor(remainingSeconds / 3600)
+        ).padStart(2, "0");
+
+        const minutes = String(
+          Math.floor((remainingSeconds % 3600) / 60)
+        ).padStart(2, "0");
+
+        const seconds = String(remainingSeconds % 60).padStart(2, "0");
+
+        timer.textContent = `${hours}:${minutes}:${seconds}`;
+
+        if (remainingSeconds > 0) {
+          remainingSeconds -= 1;
+          setTimeout(updateCountdown, 1000);
+        }
+      }
+
+      updateCountdown();
+    }
+  </script>
+</body>
+</html>
