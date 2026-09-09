@@ -2190,7 +2190,7 @@
     }
 
     /* ==========================================
-       STEP 2: SHARE BUTTON
+       STEP 2: SHARE BUTTON - FIXED
     ========================================== */
 
     const WHATSAPP_SHARE_MESSAGE = 
@@ -2263,8 +2263,36 @@
 
     function openWhatsApp() {
       const encoded = encodeURIComponent(WHATSAPP_SHARE_MESSAGE);
-      const url = `https://wa.me/?text=${encoded}`;
-      window.open(url, '_blank');
+      
+      // Primary: api.whatsapp.com - works more consistently across devices
+      const primaryUrl = `https://api.whatsapp.com/send?text=${encoded}`;
+      // Fallback: wa.me - works on mobile with app installed
+      const fallbackUrl = `https://wa.me/?text=${encoded}`;
+      // Alternative: web.whatsapp.com - for desktop
+      const webUrl = `https://web.whatsapp.com/send?text=${encoded}`;
+      
+      // Detect if on mobile
+      const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
+      
+      let newWindow;
+      
+      if (isMobile) {
+        // On mobile: try primary URL first (api.whatsapp.com)
+        newWindow = window.open(primaryUrl, '_blank');
+        
+        // If blocked or fails, try fallback (wa.me)
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          window.open(fallbackUrl, '_blank');
+        }
+      } else {
+        // On desktop: try web URL first (web.whatsapp.com)
+        newWindow = window.open(webUrl, '_blank');
+        
+        // If blocked or fails, try primary
+        if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+          window.open(primaryUrl, '_blank');
+        }
+      }
     }
 
     async function handleShareClick(e) {
@@ -2281,6 +2309,8 @@
 
       try {
         await showShareLoadingAnimation();
+        
+        // Open WhatsApp with the message
         openWhatsApp();
 
         if (shareProgress >= 100) {
